@@ -1,3 +1,15 @@
+<#
+.Description
+Create shortcut to a file in windows run dialog box. 
+Example, if you have a file in c:\users\user01\..\..\MyFile.txt, you can use this script to create a shortcut in run dialog box 
+so that you can directly open run dialog box and type Myfile (Without extension) to open the file.
+
+.Prerequisites
+Admin rights on the machine.
+Powershell version 3.0 or above.
+
+#>
+
 #Requires -RunAsAdministrator
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
 [void] [System.REflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
