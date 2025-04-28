@@ -3,7 +3,7 @@
 
 $urls = Get-Content $psscriptroot\urls.txt 
 $date = get-date -Format G 
-$finaloutput = @() 
+$GLOBAL:finaloutput = @() 
 foreach ($url in $urls) { 
     [Net.ServicePointManager]::ServerCertificateValidationCallback = { $true }  
     $req = [Net.HttpWebRequest]::Create($url)
@@ -18,6 +18,9 @@ foreach ($url in $urls) {
  
             $certissuer = ($req.ServicePoint.Certificate.GetIssuerName().split(",", [System.StringSplitOptions]::RemoveEmptyEntries) | Where-Object { $_ -match "CN=" } ).trim("CN =") 
         } 
+        $CertEndDateString = Get-Date $req.ServicePoint.Certificate.GetExpirationDateString()
+        $CertEndDate = Get-Date $CertEndDateString
+        $CurrentDate = Get-Date
  
         $output = [PSCustomObject]@{  
             URL               = $url  
@@ -25,15 +28,17 @@ foreach ($url in $urls) {
             'Cert End Date'   = $req.ServicePoint.Certificate.GetExpirationDateString() 
             'Cert Issuer'     = $certissuer 
             "Today's Date"    = $date 
+            'Cert expires in' = ($CertEndDate - $CurrentDate).Days.ToString() + ' Days'
      
         } 
     } 
     catch { 
         $formatteddata = [PSCustomObject]@{ 
             URL = "Cant get cert details for $url" 
+            $finaloutput = $finaloutput + $formatteddata
         } 
     }
     $finaloutput += $output
 } 
-$finaloutput += $formatteddata
 $finaloutput | export-csv -Path $psscriptroot\CertDetails.csv -Append -NoTypeInformation
+
