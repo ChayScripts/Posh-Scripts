@@ -75,3 +75,13 @@ Start-Sleep -Seconds 120
 
 TITLE Keep Alive
 %SystemRoot%\system32\WindowsPowerShell\v1.0\PowerShell.exe -WindowStyle Hidden -noprofile -file "C:\Scripts\KeepAlive.ps1"
+######################################################################################
+
+Add-Type -AssemblyName System.Windows.Forms
+
+while ($true) {
+    [System.Windows.Forms.SendKeys]::SendWait('{F5}')
+    Start-Sleep -Seconds 60
+}
+
+######################################################################################
