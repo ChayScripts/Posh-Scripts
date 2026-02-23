@@ -1,0 +1,13 @@
+secedit /export /cfg C:\temp\secpol.cfg > $null 2>&1
+$content = Get-Content -Path 'C:\temp\secpol.cfg'
+$values = $null
+foreach ($line in $content) {
+   if ($line -match '^SeRemoteInteractiveLogonRight') {
+       $values = $line.Split('=')[-1].Trim().Split(',')
+   }
+}
+if ($values -ne $null -and $values.Count -lt 2) {
+   gpupdate /force  > $null 2>&1
+}
+ 
+Remove-Item -Path 'C:\temp\secpol.cfg' -Force
