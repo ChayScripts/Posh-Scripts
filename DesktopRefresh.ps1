@@ -85,3 +85,18 @@ while ($true) {
 }
 
 ######################################################################################
+# C:\Scripts\KeepAlive.ps1
+
+$WinShell = New-Object -ComObject WScript.Shell
+
+while ($true) {
+    $WinShell.SendKeys("{SCROLLLOCK}")
+    Start-Sleep -Seconds 120
+}
+
+# Keepalive.vbs
+# add this vb script shortcut to startup folder
+
+CreateObject("WScript.Shell").Run "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File ""C:\Scripts\KeepAlive.ps1""", 0, False
+
+######################################################################################
